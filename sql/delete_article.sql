@@ -1,0 +1,1 @@
+DELETE FROM testing.Article WHERE id = $1;

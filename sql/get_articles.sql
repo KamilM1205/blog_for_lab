@@ -1,0 +1,1 @@
+SELECT $table_fields FROM testing.Articles WHERE blog_id = $1;

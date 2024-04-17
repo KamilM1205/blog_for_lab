@@ -1,0 +1,1 @@
+DELETE FROM testing.Comment WHERE id = $1;
