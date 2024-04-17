@@ -6,7 +6,7 @@ use actix_web::{
     middleware, web, App, HttpServer,
 };
 use log::info;
-use methods_2lab::blog;
+use methods_2lab::{article, blog, comment};
 use methods_2lab::db::init_db;
 use methods_2lab::errors::DbError;
 use methods_2lab::{config::ServerConfig, utils};
@@ -56,10 +56,27 @@ async fn main() -> std::io::Result<()> {
                 //             .route(web::delete().to(auth_handler::logout))
                 //             .route(web::get().to(auth_handler::get_me)),
                 //     ),
-                web::resource("/blog")
+                web::resource("/blogs")
                     .route(web::post().to(blog::add_blog))
                     .route(web::get().to(blog::get_blogs)),
             )
+            .service(
+                    web::resource("/article/{id}")
+                        .route(web::post().to(article::add_article))
+                        .route(web::get().to(article::get_article))
+                        .route(web::delete().to(article::delete_article))
+                )
+            .service(
+                    web::resource("/author/{id}")
+                        .route(web::post().to(author::add_author))
+                        .route(web::get().to(author::get_author))
+                )
+            .service(
+                    web::resource("/comment")
+                        .route(web::post().to(comment::add_comment))
+                        .route(web::delete().to(comment::delete_comment))
+                        .route(web::get().to(comment::get_comment))
+                )
     })
     .bind((config.cd.host, config.cd.port))?
     .run()

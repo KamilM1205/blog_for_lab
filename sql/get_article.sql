@@ -1,1 +1,1 @@
-SELECT $table_fields FROM testing.Article WHERE id = $1;
+SELECT $table_fields FROM "testing.Article" WHERE id = $1;

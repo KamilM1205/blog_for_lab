@@ -2171,3 +2171,329 @@ RETURNING  "testing.Blog".id ,  "testing.Blog".title ,  "testing.Blog".descripti
 
 2024-04-17T22:15:51.235236300+04:00 [INFO](actix_server::accept) - accept thread stopped
 
+2024-04-17T22:24:35.709359400+04:00 [INFO](methods_2lab) - Initializing server at localhost:8080
+
+2024-04-17T22:24:35.741699400+04:00 [DEBUG](tokio_postgres::simple_query) - executing statement batch: CREATE TABLE IF NOT EXISTS "testing.Category" (
+	"id" bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
+	"blog_id" serial NOT NULL,
+	"name" bigint NOT NULL UNIQUE,
+	PRIMARY KEY ("id")
+);
+
+CREATE TABLE IF NOT EXISTS "testing.Category_Type" (
+	"id" bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
+	"name" text NOT NULL UNIQUE,
+	PRIMARY KEY ("id")
+);
+
+CREATE TABLE IF NOT EXISTS "testing.Comment" (
+	"id" bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
+	"article_id" serial NOT NULL,
+	"author_id" bigint NOT NULL,
+	"text" text NOT NULL,
+	PRIMARY KEY ("id")
+);
+
+CREATE TABLE IF NOT EXISTS "testing.Blog" (
+	"id" bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
+	"title" text NOT NULL,
+	"description" text,
+	PRIMARY KEY ("id")
+);
+
+CREATE TABLE IF NOT EXISTS "testing.Author" (
+	"id" bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
+	"nickname" text NOT NULL,
+	"name" text NOT NULL,
+	"surname" text NOT NULL,
+	"date" date NOT NULL,
+	"email" text NOT NULL,
+	"phone" bigint NOT NULL,
+	"image" text NOT NULL,
+	"birthday" date NOT NULL,
+	"password" text NOT NULL,
+	PRIMARY KEY ("id")
+);
+
+CREATE TABLE IF NOT EXISTS "testing.Article" (
+	"id" bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
+	"title" text NOT NULL,
+	"file_name" text NOT NULL,
+	"date" text NOT NULL,
+	"author_id" bigint NOT NULL,
+	"blog_id" bigint NOT NULL,
+	PRIMARY KEY ("id")
+);
+
+CREATE TABLE IF NOT EXISTS "testing.Articles" (
+	"id" bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
+	"blog_id" bigint NOT NULL,
+	"article_id" bigint NOT NULL,
+	PRIMARY KEY ("id")
+);
+
+ALTER TABLE "testing.Category" ADD CONSTRAINT "Category_fk1" FOREIGN KEY ("blog_id") REFERENCES "testing.Blog"("id");
+
+ALTER TABLE "testing.Category" ADD CONSTRAINT "Category_fk2" FOREIGN KEY ("name") REFERENCES "testing.Category_Type"("id");
+
+ALTER TABLE "testing.Comment" ADD CONSTRAINT "Comment_fk1" FOREIGN KEY ("article_id") REFERENCES "testing.Article"("id");
+
+ALTER TABLE "testing.Comment" ADD CONSTRAINT "Comment_fk2" FOREIGN KEY ("author_id") REFERENCES "testing.Author"("id");
+
+ALTER TABLE "testing.Article" ADD CONSTRAINT "Article_fk4" FOREIGN KEY ("author_id") REFERENCES "testing.Author"("id");
+
+ALTER TABLE "testing.Article" ADD CONSTRAINT "Article_fk5" FOREIGN KEY ("blog_id") REFERENCES "testing.Blog"("id");
+
+ALTER TABLE "testing.Articles" ADD CONSTRAINT "Articles_fk1" FOREIGN KEY ("blog_id") REFERENCES "testing.Blog"("id");
+
+ALTER TABLE "testing.Articles" ADD CONSTRAINT "Articles_fk2" FOREIGN KEY ("article_id") REFERENCES "testing.Article"("id");
+
+2024-04-17T22:24:35.743587200+04:00 [INFO](tokio_postgres::connection) - NOTICE: relation "testing.Category" already exists, skipping
+
+2024-04-17T22:24:35.743706+04:00 [INFO](tokio_postgres::connection) - NOTICE: relation "testing.Category_Type" already exists, skipping
+
+2024-04-17T22:24:35.743773300+04:00 [INFO](tokio_postgres::connection) - NOTICE: relation "testing.Comment" already exists, skipping
+
+2024-04-17T22:24:35.743949100+04:00 [INFO](tokio_postgres::connection) - NOTICE: relation "testing.Blog" already exists, skipping
+
+2024-04-17T22:24:35.744018200+04:00 [INFO](tokio_postgres::connection) - NOTICE: relation "testing.Author" already exists, skipping
+
+2024-04-17T22:24:35.744201400+04:00 [INFO](tokio_postgres::connection) - NOTICE: relation "testing.Article" already exists, skipping
+
+2024-04-17T22:24:35.744273100+04:00 [INFO](tokio_postgres::connection) - NOTICE: relation "testing.Articles" already exists, skipping
+
+2024-04-17T22:24:35.745645300+04:00 [INFO](actix_server::builder) - starting 24 workers
+
+2024-04-17T22:24:35.745901500+04:00 [INFO](actix_server::server) - Actix runtime found; starting in Actix runtime
+
+2024-04-17T22:34:31.499095600+04:00 [DEBUG](tokio_postgres::prepare) - preparing query s0: SELECT  "testing.Blog".id ,  "testing.Blog".title ,  "testing.Blog".description  FROM "testing.Blog";
+
+2024-04-17T22:34:31.501124300+04:00 [DEBUG](tokio_postgres::query) - executing statement s0 with parameters: []
+
+2024-04-17T22:34:31.503373700+04:00 [INFO](actix_web::middleware::logger) - ::1 "GET /blog HTTP/1.1" 200 70 "-" "PostmanRuntime/7.37.3" 0.004559
+
+2024-04-17T22:54:12.414825800+04:00 [INFO](actix_server::server) - SIGINT received; starting forced shutdown
+
+2024-04-17T22:54:12.415036700+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-17T22:54:12.415108100+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-17T22:54:12.415204700+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-17T22:54:12.415347700+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-17T22:54:12.415417800+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-17T22:54:12.415544800+04:00 [DEBUG](actix_server::accept) - paused accepting connections on [::1]:8080
+
+2024-04-17T22:54:12.415665300+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-17T22:54:12.415723100+04:00 [DEBUG](actix_server::accept) - paused accepting connections on 127.0.0.1:8080
+
+2024-04-17T22:54:12.415798300+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-17T22:54:12.415948700+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-17T22:54:12.416069700+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-17T22:54:12.416310+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-17T22:54:12.416377800+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-17T22:54:12.416450200+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-17T22:54:12.416518100+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-17T22:54:12.416622500+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-17T22:54:12.416690900+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-17T22:54:12.416757300+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-17T22:54:12.416850100+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-17T22:54:12.417120300+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-17T22:54:12.417406200+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-17T22:54:12.417480400+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-17T22:54:12.417644700+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-17T22:54:12.417816300+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-17T22:54:12.417889100+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-17T22:54:12.417974600+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-17T22:54:12.418054300+04:00 [INFO](actix_server::accept) - accept thread stopped
+
+2024-04-17T22:54:25.411300700+04:00 [INFO](methods_2lab) - Initializing server at localhost:8080
+
+2024-04-17T22:54:25.434828200+04:00 [DEBUG](tokio_postgres::simple_query) - executing statement batch: CREATE TABLE IF NOT EXISTS "testing.Category" (
+	"id" bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
+	"blog_id" serial NOT NULL,
+	"name" bigint NOT NULL UNIQUE,
+	PRIMARY KEY ("id")
+);
+
+CREATE TABLE IF NOT EXISTS "testing.Category_Type" (
+	"id" bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
+	"name" text NOT NULL UNIQUE,
+	PRIMARY KEY ("id")
+);
+
+CREATE TABLE IF NOT EXISTS "testing.Comment" (
+	"id" bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
+	"article_id" serial NOT NULL,
+	"author_id" bigint NOT NULL,
+	"text" text NOT NULL,
+	PRIMARY KEY ("id")
+);
+
+CREATE TABLE IF NOT EXISTS "testing.Blog" (
+	"id" bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
+	"title" text NOT NULL,
+	"description" text,
+	PRIMARY KEY ("id")
+);
+
+CREATE TABLE IF NOT EXISTS "testing.Author" (
+	"id" bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
+	"nickname" text NOT NULL,
+	"name" text NOT NULL,
+	"surname" text NOT NULL,
+	"date" date NOT NULL,
+	"email" text NOT NULL,
+	"phone" bigint NOT NULL,
+	"image" text NOT NULL,
+	"birthday" date NOT NULL,
+	"password" text NOT NULL,
+	PRIMARY KEY ("id")
+);
+
+CREATE TABLE IF NOT EXISTS "testing.Article" (
+	"id" bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
+	"title" text NOT NULL,
+	"file_name" text NOT NULL,
+	"date" text NOT NULL,
+	"author_id" bigint NOT NULL,
+	"blog_id" bigint NOT NULL,
+	PRIMARY KEY ("id")
+);
+
+CREATE TABLE IF NOT EXISTS "testing.Articles" (
+	"id" bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
+	"blog_id" bigint NOT NULL,
+	"article_id" bigint NOT NULL,
+	PRIMARY KEY ("id")
+);
+
+ALTER TABLE "testing.Category" ADD CONSTRAINT "Category_fk1" FOREIGN KEY ("blog_id") REFERENCES "testing.Blog"("id");
+
+ALTER TABLE "testing.Category" ADD CONSTRAINT "Category_fk2" FOREIGN KEY ("name") REFERENCES "testing.Category_Type"("id");
+
+ALTER TABLE "testing.Comment" ADD CONSTRAINT "Comment_fk1" FOREIGN KEY ("article_id") REFERENCES "testing.Article"("id");
+
+ALTER TABLE "testing.Comment" ADD CONSTRAINT "Comment_fk2" FOREIGN KEY ("author_id") REFERENCES "testing.Author"("id");
+
+ALTER TABLE "testing.Article" ADD CONSTRAINT "Article_fk4" FOREIGN KEY ("author_id") REFERENCES "testing.Author"("id");
+
+ALTER TABLE "testing.Article" ADD CONSTRAINT "Article_fk5" FOREIGN KEY ("blog_id") REFERENCES "testing.Blog"("id");
+
+ALTER TABLE "testing.Articles" ADD CONSTRAINT "Articles_fk1" FOREIGN KEY ("blog_id") REFERENCES "testing.Blog"("id");
+
+ALTER TABLE "testing.Articles" ADD CONSTRAINT "Articles_fk2" FOREIGN KEY ("article_id") REFERENCES "testing.Article"("id");
+
+2024-04-17T22:54:25.436918400+04:00 [INFO](tokio_postgres::connection) - NOTICE: relation "testing.Category" already exists, skipping
+
+2024-04-17T22:54:25.437023900+04:00 [INFO](tokio_postgres::connection) - NOTICE: relation "testing.Category_Type" already exists, skipping
+
+2024-04-17T22:54:25.437093+04:00 [INFO](tokio_postgres::connection) - NOTICE: relation "testing.Comment" already exists, skipping
+
+2024-04-17T22:54:25.437281300+04:00 [INFO](tokio_postgres::connection) - NOTICE: relation "testing.Blog" already exists, skipping
+
+2024-04-17T22:54:25.437386200+04:00 [INFO](tokio_postgres::connection) - NOTICE: relation "testing.Author" already exists, skipping
+
+2024-04-17T22:54:25.437588600+04:00 [INFO](tokio_postgres::connection) - NOTICE: relation "testing.Article" already exists, skipping
+
+2024-04-17T22:54:25.437697400+04:00 [INFO](tokio_postgres::connection) - NOTICE: relation "testing.Articles" already exists, skipping
+
+2024-04-17T22:54:25.439820900+04:00 [INFO](actix_server::builder) - starting 24 workers
+
+2024-04-17T22:54:25.440137300+04:00 [INFO](actix_server::server) - Actix runtime found; starting in Actix runtime
+
+2024-04-17T22:54:49.862170800+04:00 [INFO](actix_web::middleware::logger) - ::1 "GET /test HTTP/1.1" 200 7 "-" "PostmanRuntime/7.37.3" 0.000543
+
+2024-04-17T22:54:58.069900500+04:00 [INFO](actix_web::middleware::logger) - ::1 "GET /test HTTP/1.1" 200 7 "-" "PostmanRuntime/7.37.3" 0.000274
+
+2024-04-17T23:13:55.232199900+04:00 [DEBUG](actix_web::types::json) - Failed to deserialize Json from payload. Request path: /blog
+
+2024-04-17T23:13:55.232444700+04:00 [DEBUG](actix_web::middleware::logger) - Error in response: Deserialize(Error("missing field `description`", line: 3, column: 1))
+
+2024-04-17T23:13:55.232565700+04:00 [INFO](actix_web::middleware::logger) - ::1 "POST /blog HTTP/1.1" 400 70 "-" "PostmanRuntime/7.37.3" 0.000708
+
+2024-04-17T23:14:13.188305200+04:00 [INFO](actix_web::middleware::logger) - ::1 "GET /test HTTP/1.1" 200 7 "-" "PostmanRuntime/7.37.3" 0.000335
+
+2024-04-17T23:14:17.776048700+04:00 [DEBUG](tokio_postgres::prepare) - preparing query s0: SELECT  "testing.Blog".id ,  "testing.Blog".title ,  "testing.Blog".description  FROM "testing.Blog";
+
+2024-04-17T23:14:17.779046600+04:00 [DEBUG](tokio_postgres::query) - executing statement s0 with parameters: []
+
+2024-04-17T23:14:17.782046+04:00 [INFO](actix_web::middleware::logger) - ::1 "GET /blog HTTP/1.1" 200 70 "-" "PostmanRuntime/7.37.3" 0.006351
+
+2024-04-18T00:11:10.598146900+04:00 [INFO](actix_server::server) - SIGINT received; starting forced shutdown
+
+2024-04-18T00:11:10.598579900+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-18T00:11:10.598682900+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-18T00:11:10.598774300+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-18T00:11:10.598936+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-18T00:11:10.599002800+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-18T00:11:10.599078100+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-18T00:11:10.599173600+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-18T00:11:10.599501200+04:00 [DEBUG](actix_server::accept) - paused accepting connections on [::1]:8080
+
+2024-04-18T00:11:10.599601600+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-18T00:11:10.599748+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-18T00:11:10.599828800+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-18T00:11:10.599912900+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-18T00:11:10.600039700+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-18T00:11:10.600122300+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-18T00:11:10.600202400+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-18T00:11:10.600271500+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-18T00:11:10.600373900+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-18T00:11:10.600467900+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-18T00:11:10.600552700+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-18T00:11:10.600641200+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-18T00:11:10.600742200+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-18T00:11:10.600815400+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-18T00:11:10.600882100+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-18T00:11:10.601000100+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-18T00:11:10.601110600+04:00 [INFO](actix_server::worker) - shutting down idle worker
+
+2024-04-18T00:11:10.601198400+04:00 [DEBUG](actix_server::accept) - paused accepting connections on 127.0.0.1:8080
+
+2024-04-18T00:11:10.601313200+04:00 [INFO](actix_server::accept) - accept thread stopped
+

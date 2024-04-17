@@ -25,3 +25,22 @@ impl ResponseError for DbError {
         }
     }
 }
+
+#[derive(Debug, Display, From)]
+pub enum ServiceError {
+	InternalServerError,
+	Unauthorized,
+	BadRequest(String),
+}
+
+impl ResponseError for ServiceError {
+	fn error_response(&self) -> HttpResponse<actix_web::body::BoxBody> {
+	    match self {
+	    	ServiceError::InternalServerError => {
+	    		HttpResponse::InternalServerError().json("Internal server error, please try again later")
+	    	}
+	    	ServiceError::Unauthorized => HttpResponse::Unauthorized().json("Unauthorized"),
+	    	ServiceError::BadRequest(ref message) => HttpResponse::BadRequest().json(message),
+	    }
+	}
+}

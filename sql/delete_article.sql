@@ -1,1 +1,1 @@
-DELETE FROM testing.Article WHERE id = $1;
+DELETE FROM "testing.Article" WHERE id = $1;

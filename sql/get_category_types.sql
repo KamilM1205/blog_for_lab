@@ -1,1 +1,1 @@
-SELECT $table_fields FROM testing.Category_Type;
+SELECT $table_fields FROM "testing.Category_Type";
