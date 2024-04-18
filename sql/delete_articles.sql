@@ -1,0 +1,1 @@
+DELETE FROM "testing.Articles" WHERE article_id = $1;

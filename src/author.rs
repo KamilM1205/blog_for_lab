@@ -6,11 +6,11 @@ pub async fn add_author(
     author: web::Json<Author>,
     data: web::Data<ServerConfig>,
 ) -> Result<HttpResponse, Error> {
-    let author = author.into_inner();
+    let mut author = author.into_inner();
 
     let client = data.pg.get().await.map_err(DbError::PoolError)?;
 
-    let new_author = db::add_author(&client, author).await?;
+    let new_author = db::add_author(&client, &mut author).await?;
 
     Ok(HttpResponse::Ok().json(new_author))
 }

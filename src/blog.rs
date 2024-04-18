@@ -1,11 +1,14 @@
 use actix_web::{web, Error, HttpResponse};
 
-use crate::{config::ServerConfig, db, errors::DbError, models::Blog};
+use crate::{auth_handler::LoggedUser, config::ServerConfig, db, errors::{DbError, ServiceError}, models::Blog};
 
 pub async fn add_blog(
     blog: web::Json<Blog>,
     data: web::Data<ServerConfig>,
+    user: Option<LoggedUser>,
 ) -> Result<HttpResponse, Error> {
+	let _ = user.ok_or(ServiceError::Unauthorized)?;
+
     let blog = blog.into_inner();
 
     let client = data.pg.get().await.map_err(DbError::PoolError)?;

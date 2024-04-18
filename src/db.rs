@@ -1,3 +1,4 @@
+use chrono::{NaiveDateTime, Utc};
 use deadpool_postgres::Client;
 use tokio_pg_mapper::FromTokioPostgresRow;
 
@@ -68,10 +69,12 @@ pub async fn add_article(client: &Client, article: Article) -> Result<Article, D
         .ok_or(DbError::NotFound)
 }
 
-pub async fn add_author(client: &Client, author: Author) -> Result<Author, DbError> {
+pub async fn add_author(client: &Client, author: &mut Author) -> Result<Author, DbError> {
     let stmt = include_str!("../sql/add_author.sql");
     let stmt = stmt.replace("$table_fields", &Author::sql_table_fields());
     let stmt = client.prepare(&stmt).await?;
+
+    author.date = Utc::now().naive_utc().into();
 
     client
         .query(
@@ -133,11 +136,32 @@ pub async fn get_article(client: &Client, article_id: i64) -> Result<Article, Db
     let stmt = stmt.replace("$table_fields", &Article::sql_table_fields());
     let stmt = client.prepare(&stmt).await?;
 
-    let result = client.query_one(&stmt, &[&article_id]).await?;
+    let result = client.query_one(&stmt, &[&article_id]).await.map_err(|_| DbError::NotFound)?;
 
     let result = Article::from_row(result)?;
 
     Ok(result)
+}
+
+pub async fn add_articles(client: &Client, articles: Articles) -> Result<Articles, DbError> {
+    let stmt = include_str!("../sql/add_articles.sql");
+    let stmt = stmt.replace("$table_fields", &Articles::sql_table_fields());
+    let stmt = client.prepare(&stmt).await?;
+
+    client
+        .query(
+            &stmt,
+            &[
+                &articles.blog_id,
+                &articles.article_id
+            ],
+        )
+        .await?
+        .iter()
+        .map(|row| Articles::from_row_ref(row).unwrap())
+        .collect::<Vec<Articles>>()
+        .pop()
+        .ok_or(DbError::NotFound)
 }
 
 pub async fn get_articles(client: &Client, blog_id: i64) -> Result<Vec<Articles>, DbError> {
@@ -155,12 +179,19 @@ pub async fn get_articles(client: &Client, blog_id: i64) -> Result<Vec<Articles>
     Ok(result)
 }
 
+pub async fn delete_articles(client: &Client, article_id: i64) -> Result<u64, DbError> {
+    let stmt = include_str!("../sql/delete_articles.sql");
+    let stmt = client.prepare(&stmt).await?;
+
+    Ok(client.execute(&stmt, &[&article_id]).await?)
+}
+
 pub async fn get_author(client: &Client, author_id: i64) -> Result<Author, DbError> {
     let stmt = include_str!("../sql/get_author.sql");
     let stmt = stmt.replace("$table_fields", &Author::sql_table_fields());
     let stmt = client.prepare(&stmt).await?;
 
-    let result = client.query_one(&stmt, &[&author_id]).await?;
+    let result = client.query_one(&stmt, &[&author_id]).await.map_err(|_| DbError::NotFound)?;
 
     let result = Author::from_row(result)?;
 
@@ -172,7 +203,7 @@ pub async fn get_author_by_email(client: &Client, email: &str) -> Result<Author,
     let stmt = stmt.replace("$table_fields", &Author::sql_table_fields());
     let stmt = client.prepare(&stmt).await?;
 
-    let result = client.query_one(&stmt, &[&email]).await?;
+    let result = client.query_one(&stmt, &[&email]).await.map_err(|_| DbError::NotFound)?;
     let result = Author::from_row(result)?;
 
     Ok(result)
@@ -183,7 +214,7 @@ pub async fn get_author_by_nickname(client: &Client, nickname: &str) -> Result<A
     let stmt = stmt.replace("$table_fields", &Author::sql_table_fields());
     let stmt = client.prepare(&stmt).await?;
 
-    let result = client.query_one(&stmt, &[&nickname]).await?;
+    let result = client.query_one(&stmt, &[&nickname]).await.map_err(|_| DbError::NotFound)?;
     let result = Author::from_row(result)?;
 
     Ok(result)
@@ -230,6 +261,19 @@ pub async fn get_comments(client: &Client, article_id: i64) -> Result<Vec<Commen
         .iter()
         .map(|row| Comment::from_row_ref(row).unwrap())
         .collect::<Vec<Comment>>();
+
+    Ok(result)
+}
+
+pub async fn get_comment(client: &Client, comment_id: i64) -> Result<Comment, DbError> {
+    let stmt = include_str!("../sql/get_comment.sql");
+    let stmt = stmt.replace("$table_fields", &Comment::sql_table_fields());
+    let stmt = client.prepare(&stmt).await?;
+
+    let result = client
+        .query_one(&stmt, &[&comment_id])
+        .await.map_err(|_| DbError::NotFound)?;
+    let result = Comment::from_row(result)?;
 
     Ok(result)
 }

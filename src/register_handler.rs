@@ -45,7 +45,7 @@ pub async fn register_author(
         return Ok(ServiceError::BadRequest("Nickname already used.".into()).error_response());
     }
 
-    let new_author = add_author(&client, author).await?;
+    let new_author = add_author(&client, &mut author).await?;
 
     Ok(HttpResponse::Ok().json(&new_author))
 }

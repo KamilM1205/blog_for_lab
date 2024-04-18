@@ -10,3 +10,4 @@ pub mod log;
 pub mod models;
 pub mod register_handler;
 pub mod utils;
+pub mod articles;

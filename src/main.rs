@@ -8,7 +8,7 @@ use actix_web::{
 use log::info;
 use methods_2lab::db::init_db;
 use methods_2lab::errors::DbError;
-use methods_2lab::{article, auth_handler, author, blog, comment, register_handler};
+use methods_2lab::{article, articles, auth_handler, author, blog, comment, register_handler};
 use methods_2lab::{config::ServerConfig, utils};
 
 #[actix_web::main]
@@ -60,12 +60,22 @@ async fn main() -> std::io::Result<()> {
             )
             .service(
                 web::scope("/article")
-                    .service(web::resource("").route(web::get().to(article::get_article)))
+                    .service(
+                        web::resource("")
+                            .route(web::post().to(article::add_article)),
+                    )
                     .service(
                         web::resource("/{article_id}")
-                            .route(web::post().to(article::add_article))
+                            .route(web::get().to(article::get_article))
                             .route(web::delete().to(article::delete_article)),
                     ),
+            )
+            .service(
+                web::scope("/articles")
+                    .service(
+                        web::resource("/{id}")
+                            .route(web::get().to(articles::get_articles))
+                    )
             )
             .service(
                 web::scope("/author").service(

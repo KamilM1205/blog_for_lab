@@ -1,0 +1,1 @@
+SELECT $table_fields FROM "testing.Comment" WHERE id = $1;

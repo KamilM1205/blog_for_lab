@@ -1,12 +1,16 @@
-use actix_web::{web, Error, HttpResponse};
+use actix_web::{web, Error, HttpResponse, ResponseError};
 
-use crate::{config::ServerConfig, db, errors::DbError, models::Comment};
+use crate::{auth_handler::LoggedUser, config::ServerConfig, db, errors::{DbError, ServiceError}, models::Comment};
 
 pub async fn add_comment(
     comment: web::Json<Comment>,
     data: web::Data<ServerConfig>,
+    user: Option<LoggedUser>,
 ) -> Result<HttpResponse, Error> {
-    let comment = comment.into_inner();
+    let user = user.ok_or(ServiceError::Unauthorized)?;
+    let mut comment = comment.into_inner();
+
+    comment.author_id = user.id;
 
     let client = data.pg.get().await.map_err(DbError::PoolError)?;
 
@@ -30,9 +34,17 @@ pub async fn get_comments(
 pub async fn delete_comment(
     id: web::Path<i64>,
     data: web::Data<ServerConfig>,
+    user: Option<LoggedUser>,
 ) -> Result<HttpResponse, Error> {
+    let user = user.ok_or(ServiceError::Unauthorized)?;
     let id = id.into_inner();
     let client = data.pg.get().await.map_err(DbError::PoolError)?;
+
+    let comment = db::get_comment(&client, id).await?;
+
+    if user.id != comment.author_id {
+        return Ok(ServiceError::BadRequest("You are not owner of this comment.".into()).error_response());
+    }
 
     let count = db::delete_comment(&client, id).await?;
 

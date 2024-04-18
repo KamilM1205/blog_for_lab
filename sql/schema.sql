@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS "testing.Category_Type" (
 
 CREATE TABLE IF NOT EXISTS "testing.Comment" (
 	"id" bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
-	"article_id" serial NOT NULL,
+	"article_id" bigint NOT NULL,
 	"author_id" bigint NOT NULL,
 	"text" text NOT NULL,
 	PRIMARY KEY ("id")
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS "testing.Author" (
 	"surname" text NOT NULL,
 	"date" date NOT NULL,
 	"email" text NOT NULL,
-	"phone" bigint NOT NULL,
+	"phone" text NOT NULL,
 	"image" text NOT NULL,
 	"birthday" date NOT NULL,
 	"password" text NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS "testing.Article" (
 	"id" bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
 	"title" text NOT NULL,
 	"file_name" text NOT NULL,
-	"date" text NOT NULL,
+	"date" timestamp NOT NULL,
 	"author_id" bigint NOT NULL,
 	"blog_id" bigint NOT NULL,
 	PRIMARY KEY ("id")
