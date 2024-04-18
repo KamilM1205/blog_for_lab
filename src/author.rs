@@ -15,8 +15,11 @@ pub async fn add_author(
     Ok(HttpResponse::Ok().json(new_author))
 }
 
-pub async fn get_author(id: web::Path<i64>, data: web::Data<ServerConfig>) -> Result<HttpResponse, Error> {
-	let id = id.into_inner();
+pub async fn get_author(
+    id: web::Path<i64>,
+    data: web::Data<ServerConfig>,
+) -> Result<HttpResponse, Error> {
+    let id = id.into_inner();
     let client = data.pg.get().await.map_err(DbError::PoolError)?;
 
     let author = db::get_author(&client, id).await?;

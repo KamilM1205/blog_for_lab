@@ -15,8 +15,11 @@ pub async fn add_article(
     Ok(HttpResponse::Ok().json(new_article))
 }
 
-pub async fn get_article(id: web::Path<i64>, data: web::Data<ServerConfig>) -> Result<HttpResponse, Error> {
-	let id = id.into_inner();
+pub async fn get_article(
+    id: web::Path<i64>,
+    data: web::Data<ServerConfig>,
+) -> Result<HttpResponse, Error> {
+    let id = id.into_inner();
     let client = data.pg.get().await.map_err(DbError::PoolError)?;
 
     let article = db::get_article(&client, id).await?;
@@ -24,11 +27,14 @@ pub async fn get_article(id: web::Path<i64>, data: web::Data<ServerConfig>) -> R
     Ok(HttpResponse::Ok().json(article))
 }
 
-pub async fn delete_article(id: web::Path<i64>, data: web::Data<ServerConfig>) -> Result<HttpResponse, Error> {
-	let id = id.into_inner();
-	let client = data.pg.get().await.map_err(DbError::PoolError)?;
+pub async fn delete_article(
+    id: web::Path<i64>,
+    data: web::Data<ServerConfig>,
+) -> Result<HttpResponse, Error> {
+    let id = id.into_inner();
+    let client = data.pg.get().await.map_err(DbError::PoolError)?;
 
-	let count = db::delete_article(&client, id).await?;
+    let count = db::delete_article(&client, id).await?;
 
-	Ok(HttpResponse::Ok().body(count.to_string()))
+    Ok(HttpResponse::Ok().body(count.to_string()))
 }

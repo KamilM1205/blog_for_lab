@@ -1,0 +1,1 @@
+SELECT $table_fields FROM "testing.Author" WHERE email = $1;

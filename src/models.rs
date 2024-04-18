@@ -5,7 +5,7 @@ use tokio_pg_mapper_derive::PostgresMapper;
 #[derive(Deserialize, Serialize, PostgresMapper)]
 #[pg_mapper(table = "\"testing.Author")]
 pub struct Author {
-	#[serde(skip_deserializing)]
+    #[serde(skip_deserializing)]
     pub id: i64,
     pub nickname: String,
     pub name: String,
@@ -21,7 +21,7 @@ pub struct Author {
 #[derive(Deserialize, Serialize, PostgresMapper)]
 #[pg_mapper(table = "\"testing.Article\"")]
 pub struct Article {
-	#[serde(skip_deserializing)]
+    #[serde(skip_deserializing)]
     pub id: i64,
     pub title: String,
     pub file_name: String,
@@ -33,7 +33,7 @@ pub struct Article {
 #[derive(Deserialize, Serialize, PostgresMapper)]
 #[pg_mapper(table = "\"testing.Articles\"")]
 pub struct Articles {
-	#[serde(skip_deserializing)]
+    #[serde(skip_deserializing)]
     pub id: i64,
     pub blog_id: i64,
     pub article_id: i64,
@@ -42,7 +42,7 @@ pub struct Articles {
 #[derive(Deserialize, Serialize, PostgresMapper)]
 #[pg_mapper(table = "\"testing.Blog\"")]
 pub struct Blog {
-	#[serde(skip_deserializing)]
+    #[serde(skip_deserializing)]
     pub id: i64,
     pub title: String,
     pub description: String,
@@ -51,7 +51,7 @@ pub struct Blog {
 #[derive(Deserialize, Serialize, PostgresMapper)]
 #[pg_mapper(table = "\"testing.Category\"")]
 pub struct Category {
-	#[serde(skip_deserializing)]
+    #[serde(skip_deserializing)]
     pub id: i64,
     pub blog_id: i64,
     pub name: String,
@@ -60,7 +60,7 @@ pub struct Category {
 #[derive(Deserialize, Serialize, PostgresMapper)]
 #[pg_mapper(table = "\"testing.Category_Type\"")]
 pub struct CategoryType {
-	#[serde(skip_deserializing)]
+    #[serde(skip_deserializing)]
     pub id: i64,
     pub name: String,
 }
@@ -68,7 +68,7 @@ pub struct CategoryType {
 #[derive(Deserialize, Serialize, PostgresMapper)]
 #[pg_mapper(table = "\"testing.Comment\"")]
 pub struct Comment {
-	#[serde(skip_deserializing)]
+    #[serde(skip_deserializing)]
     pub id: i64,
     pub article_id: i64,
     pub author_id: i64,
